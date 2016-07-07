@@ -292,8 +292,11 @@ declare module "knex" {
     }
 
     interface Transaction extends QueryBuilder {
+      (tableName?: string): Knex.QueryBuilder;
       commit: any;
       rollback: any;
+      raw: Knex.RawBuilder;
+      schema: Knex.SchemaBuilder;
     }
 
     //

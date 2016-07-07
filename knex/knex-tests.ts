@@ -383,6 +383,30 @@ knex.transaction(function(trx) {
   console.error(error);
 });
 
+// Using trx with raw
+knex.transaction(function(trx) {
+  return trx.raw('select 1');
+});
+
+// Using trx with table name
+knex.transaction(function(trx) {
+  return trx('users')
+  .select(knex.raw('count(*) as user_count, status'))
+  .where(knex.raw(1))
+  .orWhere(knex.raw('status <> ?', [1]))
+  .groupBy('status');
+});
+
+// Using trx with schema
+knex.transaction(function(trx) {
+  return trx.schema.createTable('users', function (table) {
+    table.increments();
+    table.string('name');
+    table.enu('favorite_color', ['red', 'blue', 'green']);
+    table.timestamps();
+  });
+});
+
 knex.schema.createTable('users', function (table) {
   table.increments();
   table.string('name');
